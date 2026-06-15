@@ -63,3 +63,13 @@ for i, image in enumerate(base_images):
         transformed_images.append(warped)
 
 total_images = base_images + transformed_images
+# print(len(total_images))
+
+#Applying Gaussian blur
+sigmas = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5]
+blurred_images = []
+
+for image in total_images:
+    for s in sigmas:
+        blur = cv2.GaussianBlur(image, (0, 0), sigmaX=s)
+        blurred_images.append(blur)

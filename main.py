@@ -4,7 +4,11 @@ import scipy.stats as stats
 import matplotlib as plt
 import os
 
-img = cv2.imread('/Users/dusanvicentic/WSU/Image Analysis & Computer Vision/DusanVicentic-CS898BA-Project1/HW1_IMG_CS898BA.png')
+img_path = 'HW1_IMG_CS898BA.png'
+img = cv2.imread(img_path)
+
+output_dir = 'output_images'
+os.makedirs(output_dir, exist_ok=True)
 
 b, g, r = cv2.split(img)
 channels = {'Blue': b, 'Green': g, 'Red': r}
@@ -46,6 +50,10 @@ final_eq_img = cv2.cvtColor(hsv_equal, cv2.COLOR_HSV2BGR)
 
 # Added to list of images
 base_images.append(final_eq_img)
+base_names = ['original', 'gray', 'binary', 'hsv', 'lab', 'hls', 'equalized']
+
+for image, name in zip(base_images, base_names):
+    cv2.imwrite(f"{output_dir}/{name}.jpg", image)
 
 # Random affine transformations 
 
@@ -73,3 +81,16 @@ for image in total_images:
     for s in sigmas:
         blur = cv2.GaussianBlur(image, (0, 0), sigmaX=s)
         blurred_images.append(blur)
+
+# 4 random subsets
+subset = random.sample(blurred_images, 42)
+
+# Greyscale for edge detection
+for image in subset:
+    if len(image.shape) == 3:
+        gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    else:
+        gray_img = image
+
+# Edge detection
+   # laplacian = cv2.Laplacian(gray_img

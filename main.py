@@ -52,11 +52,11 @@ final_eq_img = cv2.cvtColor(hsv_equal, cv2.COLOR_HSV2BGR)
 base_images.append(final_eq_img)
 base_names = ['original', 'gray', 'binary', 'hsv', 'lab', 'hls', 'equalized']
 
+# Save base images
 for image, name in zip(base_images, base_names):
     cv2.imwrite(f"{output_dir}/{name}.jpg", image)
 
 # Random affine transformations 
-
 import random
 transformed_images = []
 height, width = img. shape[:2]
@@ -82,8 +82,9 @@ for image in total_images:
         blur = cv2.GaussianBlur(image, (0, 0), sigmaX=s)
         blurred_images.append(blur)
 
+all_images = total_images + blurred_images
 # 4 random subsets
-subset = random.sample(blurred_images, 42)
+subset = random.sample(all_images, 42)
 
 # Greyscale for edge detection
 for image in subset:

@@ -12,16 +12,16 @@ channels = {'Blue': b, 'Green': g, 'Red': r}
 for name, channel in channels.items():
     flat = channel.flatten()
 
-print(f"--- Stats for {name} Channel ---")
-print(f'Min: {np.min(flat)}')
-print(f'Max: {np.max(flat)}')
-print(f'Range: {np.max(flat)}')
-print(f'Average: {np.mean(flat):.2f}')
-print(f'Median: {np.median(flat)}')
+    print(f"--- Stats for {name} Channel ---")
+    print(f'Min: {np.min(flat)}')
+    print(f'Max: {np.max(flat)}')
+    print(f'Range: {np.max(flat)}')
+    print(f'Average: {np.mean(flat):.2f}')
+    print(f'Median: {np.median(flat)}')
 
-mode_result = stats.mode(flat, keepdims=False)
-print(f'Mode: {mode_result.mode}')
-print(f'Skew: {stats.skew(flat):.2f}')
+    mode_result = stats.mode(flat, keepdims=False)
+    print(f'Mode: {mode_result.mode}')
+    print(f'Skew: {stats.skew(flat):.2f}')
 
-print(f'Std Dev: {np.std(flat):.2f}')
-print(f'Variance: {np.var(flat):.2f}\n')
+    print(f'Std Dev: {np.std(flat):.2f}')
+    print(f'Variance: {np.var(flat):.2f}\n')

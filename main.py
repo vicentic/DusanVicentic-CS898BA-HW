@@ -25,3 +25,4 @@ for name, channel in channels.items():
 
     print(f'Std Dev: {np.std(flat):.2f}')
     print(f'Variance: {np.var(flat):.2f}\n')
+

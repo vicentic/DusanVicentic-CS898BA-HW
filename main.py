@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import scipy.stats as stats
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import os
 
 img_path = 'HW1_IMG_CS898BA.png'
@@ -83,15 +83,59 @@ for image in total_images:
         blurred_images.append(blur)
 
 all_images = total_images + blurred_images
-# 4 random subsets
-subset = random.sample(all_images, 42)
 
-# Greyscale for edge detection
-for image in subset:
+# Create random subset
+subset = random.sample(all_images, 42)
+plots_saved = 0
+
+# Greyscale images for edge detection
+for i, image in enumerate(subset):
     if len(image.shape) == 3:
         gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     else:
-        gray_img = image
+        gray_img = image.copy()
 
-# Edge detection
-   # laplacian = cv2.Laplacian(gray_img
+    # Edge detection
+    laplacian = cv2.Laplacian(gray_img, cv2.CV_64F)
+    laplacian_8u = cv2.convertScaleAbs(laplacian)
+    
+    sobel_x = cv2.Sobel(gray_img, cv2.CV_64F, 1, 0, ksize=3)
+    sobel_y = cv2.Sobel(gray_img, cv2.CV_64F, 0, 1, ksize=3)
+    sobel_combined = cv2.magnitude(sobel_x, sobel_y)
+    sobel_8u = cv2.convertScaleAbs(sobel_combined)
+
+    canny = cv2.Canny(gray_img, 100, 200)
+
+    kernerlx = np.array([[1, 1, 1], [0, 0, 0], [-1, -1, -1]])
+    kernerly = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]])
+    prewitt_x = cv2.filter2D(gray_img, -1, kernerlx)
+    prewitt_y = cv2.filter2D(gray_img, -1, kernerly)
+    prewitt_combined = cv2.addWeighted(prewitt_x, 0.5, prewitt_y, 0.5, 0)
+
+    # Save images
+    cv2.imwrite(f'{output_dir}/10_subset_input_{i+1}.jpg', image)
+    cv2.imwrite(f'{output_dir}/10_subset_laplacian_{i+1}.jpg', laplacian_8u)
+    cv2.imwrite(f'{output_dir}/10_subset_sobel_{i+1}.jpg', sobel_8u)
+    cv2.imwrite(f'{output_dir}/10_subset_canny_{i+1}.jpg', canny)
+    cv2.imwrite(f'{output_dir}/10_subset_prewitt_{i+1}.jpg', prewitt_combined)  
+
+    # Generate plots
+    if plots_saved < 6:
+        images_to_plot = [image, laplacian_8u, sobel_8u, canny, prewitt_combined]
+        titles = ['Input', 'Laplacian', 'Sobel', 'Canny', 'Prewitt']
+        
+        fig, axes = plt.subplots(1, 5, figsize=(20, 5))
+        for k in range(5):
+            img_display = images_to_plot[k]
+            if k == 0 and len(img_display.shape) == 3:
+                img_display = cv2.cvtColor(img_display, cv2.COLOR_BGR2RGB)
+
+            axes[k].imshow(img_display, cmap='gray')
+            axes[k].set_title(titles[k])
+            axes[k].axis('off')
+
+        plt.tight_layout()
+        plt.savefig(f'{output_dir}/11_subset_plots_{i+1}.jpg')
+        plt.close(fig)
+        plots_saved += 1
+

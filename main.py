@@ -59,6 +59,10 @@ for image, name in zip(base_images, base_names):
 # Random affine transformations 
 import random
 transformed_images = []
+
+total_images = base_images + transformed_images
+total_info = base_names.copy()
+
 height, width = img. shape[:2]
 center = (width / 2, height / 2)
 
@@ -69,27 +73,37 @@ for i, image in enumerate(base_images):
         matrix = cv2.getRotationMatrix2D(center, angle, scale)
         warped = cv2.warpAffine(image, matrix, (width, height))
         transformed_images.append(warped)
+        total_info.append(f'{base_names[i]}_affine_{j+1}')
+        cv2.imwrite(f'{output_dir}/{base_names[i]}_affine_{j+1}.jpg', warped)
 
-total_images = base_images + transformed_images
 # print(len(total_images))
 
 #Applying Gaussian blur
 sigmas = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5]
 blurred_images = []
+blurred_info = []
 
 for image in total_images:
     for s in sigmas:
         blur = cv2.GaussianBlur(image, (0, 0), sigmaX=s)
+        
         blurred_images.append(blur)
+        blurred_info.append(f'{total_info[i]}_blurred_{s}')
+        cv2.imwrite(f'{output_dir}/{total_info[i]}_blurred_{s}.jpg', blur)
 
 all_images = total_images + blurred_images
+all_info = total_info + blurred_info
 
 # Create random subset
-subset = random.sample(all_images, 42)
-plots_saved = 0
+
+zipped_168 = list(zip(all_images, all_info))
+subset = random.sample(zipped_168, 42)
+
+readme_indices = random.sample(range(42), 6)
+plots_saved = 1
 
 # Greyscale images for edge detection
-for i, image in enumerate(subset):
+for i, (image, history_text) in enumerate(subset):
     if len(image.shape) == 3:
         gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     else:
@@ -120,22 +134,28 @@ for i, image in enumerate(subset):
     cv2.imwrite(f'{output_dir}/10_subset_prewitt_{i+1}.jpg', prewitt_combined)  
 
     # Generate plots
-    if plots_saved < 6:
-        images_to_plot = [image, laplacian_8u, sobel_8u, canny, prewitt_combined]
-        titles = ['Input', 'Laplacian', 'Sobel', 'Canny', 'Prewitt']
+    images_to_plot = [image, laplacian_8u, sobel_8u, canny, prewitt_combined]
+    titles = ['Input', 'Laplacian', 'Sobel', 'Canny', 'Prewitt']
         
-        fig, axes = plt.subplots(1, 5, figsize=(20, 5))
-        for k in range(5):
-            img_display = images_to_plot[k]
-            if k == 0 and len(img_display.shape) == 3:
-                img_display = cv2.cvtColor(img_display, cv2.COLOR_BGR2RGB)
+    fig, axes = plt.subplots(1, 5, figsize=(20, 6))
+    fig.suptitle(f'Processing History: {history_text}', fontsize=16, fontweight='bold')
+        
+    for k in range(5):
+        img_display = images_to_plot[k]
+        if k == 0 and len(img_display.shape) == 3:
+            img_display = cv2.cvtColor(img_display, cv2.COLOR_BGR2RGB)
 
-            axes[k].imshow(img_display, cmap='gray')
-            axes[k].set_title(titles[k])
-            axes[k].axis('off')
+        axes[k].imshow(img_display, cmap='gray')
+        axes[k].set_title(titles[k])
+        axes[k].axis('off')
 
-        plt.tight_layout()
-        plt.savefig(f'{output_dir}/11_subset_plots_{i+1}.jpg')
-        plt.close(fig)
+    plt.tight_layout()
+    plt.savefig(f'{output_dir}/11_subset_plots_{i+1}.png')
+
+    if i in readme_indices:
+        plt.savefig(f'{output_dir}/README_plot_{plots_saved}.png')        
         plots_saved += 1
 
+    plt.close(fig)
+
+print(f'I am officially bored with this')

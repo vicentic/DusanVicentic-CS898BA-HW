@@ -9,6 +9,7 @@ img = cv2.imread('/Users/dusanvicentic/WSU/Image Analysis & Computer Vision/Dusa
 b, g, r = cv2.split(img)
 channels = {'Blue': b, 'Green': g, 'Red': r}
 
+# Descriptive statistics for each channel
 for name, channel in channels.items():
     flat = channel.flatten()
 
@@ -25,4 +26,24 @@ for name, channel in channels.items():
 
     print(f'Std Dev: {np.std(flat):.2f}')
     print(f'Variance: {np.var(flat):.2f}\n')
+
+# Conversions
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+hls = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
+_, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+base_images = [img, gray, binary, hsv, lab, hls]
+
+# Histogram equalization on V(value)
+h, s, v = cv2.split(hsv)
+v_equalized = cv2.equalizeHist(v)
+hsv_equal = cv2.merge((h, s, v_equalized))
+
+# Convert image to RGB
+final_eq_img = cv2.cvtColor(hsv_equal, cv2.COLOR_HSV2BGR)
+
+# Added to list of images
+base_images.append(final_eq_img)
 

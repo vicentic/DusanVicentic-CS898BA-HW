@@ -47,3 +47,19 @@ final_eq_img = cv2.cvtColor(hsv_equal, cv2.COLOR_HSV2BGR)
 # Added to list of images
 base_images.append(final_eq_img)
 
+# Random affine transformations 
+
+import random
+transformed_images = []
+height, width = img. shape[:2]
+center = (width / 2, height / 2)
+
+for i, image in enumerate(base_images):
+    for j in range(2):
+        angle = random.randint(1, 359)
+        scale = random.uniform(0.5, 1.5)
+        matrix = cv2.getRotationMatrix2D(center, angle, scale)
+        warped = cv2.warpAffine(image, matrix, (width, height))
+        transformed_images.append(warped)
+
+total_images = base_images + transformed_images

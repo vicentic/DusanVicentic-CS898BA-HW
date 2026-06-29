@@ -54,10 +54,10 @@ Applying a gausian blur before edge detection reduces noise. At higher sigmas, t
 
 Used 4 different algorithms on heavily modified pictures.
 
-1. Sobel: first derivative changes, provides clear boundaries resistant to small noise.
+1. Sobel: best results, first derivative changes, provides clear boundaries resistant to small noise.
 2. Prewitt: similar to sobel, without center weighting. Weaker edges, and more artifacts than sobel
 3. Laplacian: Second derivative, too sensitive, chaotic edge maps if Gausian blur was not strong enoug
-4. Canny: Best results, but highes computation cost. Provided continous, sharp outlines of objects
+4. Canny: Highest computation cost. Provided continous, sharp outlines of objects on some of the images
 
 ## Plots
 

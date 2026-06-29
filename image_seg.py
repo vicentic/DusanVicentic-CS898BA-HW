@@ -97,21 +97,21 @@ axes[0, 1].imshow(cv2.cvtColor(image_norm, cv2.COLOR_BGR2RGB))
 axes[0, 1].set_title('Normalized Image')
 axes[0, 1].axis('off')
 
-axes[0, 2].imshow(mask_otsu, cmap='gray')
-axes[0, 2].set_title('Otsu Thresholding')
-axes[0, 2].axis('off')
+axes[1, 1].imshow(mask_otsu, cmap='gray')
+axes[1, 1].set_title('Otsu Thresholding')
+axes[1, 1].axis('off')
 
 axes[1, 0].imshow(mask_adapt, cmap='gray')
 axes[1, 0].set_title('Adaptive Thresholding')
 axes[1, 0].axis('off')
 
-axes[1, 1].imshow(mask_kmeans, cmap='gray')
-axes[1, 1].set_title('K-means Clustering')
-axes[1, 1].axis('off')
-
-axes[1, 2].imshow(gt_bin, cmap='gray')
-axes[1, 2].set_title('Ground Truth Mask')
+axes[1, 2].imshow(mask_kmeans, cmap='gray')
+axes[1, 2].set_title('K-means Clustering')
 axes[1, 2].axis('off')
+
+axes[0, 2].imshow(gt_bin, cmap='gray')
+axes[0, 2].set_title('Ground Truth Mask')
+axes[0, 2].axis('off')
 
 plt.tight_layout()
 plt.savefig(os.path.join(output_dir, 'hw2_segmentation_results.png'), dpi=300)

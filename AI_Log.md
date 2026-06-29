@@ -10,3 +10,4 @@
 | 06/14/2026 9:30PM | Explain edge detection in detail and how each method is used to test the subset? | Gemini | Broke down each of the listed methods and gave a brief explenation | Ran edge detection on the random subset
 | 06/14/2026 10:00PM | How do I add 6 random plots to the readme | Gemini | Plot explenation and readme synopsis | created readme with 6 random plots
 | 06/14/2026 10:15PM | How should I add processing techniques to plots | Gemini | Explained how to add processing data | Reworked script to add processing data |
+| 06/28/2026 03:30PM | What is the best software on mac to create a ground truth image | Gemini | Listed possible tools | Used suggested website to create ground truth png |

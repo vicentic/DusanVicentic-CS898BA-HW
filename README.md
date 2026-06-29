@@ -29,9 +29,9 @@ Used 4 different algorithms on heavily modified pictures.
 
 ## Plots
 
-![Plot 1](./output_images/11_subset_plots_1.png)
-![Plot 2](./output_images/11_subset_plots_2.png)
-![Plot 3](./output_images/11_subset_plots_3.png)
-![Plot 4](./output_images/11_subset_plots_4.png)
-![Plot 5](./output_images/11_subset_plots_5.png)
-![Plot 6](./output_images/11_subset_plots_6.png)
+![Plot 1](./output_images/README_plot_1.png)
+![Plot 2](./output_images/README_plot_2.png)
+![Plot 3](./output_images/README_plot_3.png)
+![Plot 4](./output_images/README_plot_4.png)
+![Plot 5](./output_images/README_plot_5.png)
+![Plot 6](./output_images/README_plot_6.png)

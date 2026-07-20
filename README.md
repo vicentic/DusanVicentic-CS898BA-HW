@@ -1,37 +1,34 @@
-# CS898BA - HW 1
+# CS898BA - HW 3
 
-## Instructions
+## Part 5: Evaluation and Analysis
 
-1. open project directory and create Python virtual environment
-'python3 -m venv venv'
+### Qualitative Analysis
 
-2. activate environment
-'source venv/bin/activate (Mac) or '.\venv\Scripts\activate' (Windows)
+*   **Data Augmentation:** The implementation of random horizontal flips, minor rotations, and brightness adjustments prevented the baseline model from memorizing exact pixel layouts. Structural regularizer kept the training and validation curves tight, allowing the baseline model to achieve 90% accuracy without suffering from overfitting.
 
-3. install dependencies:
-'pip install opencv-python numpy scipy matplotlib'
+*   **Hyperparameter Tuning & Over-Regularization:** KerasTuner Random Search resulted in a performance drop, the "optimized" model fell to 86% accuracy. Because the fish dataset has 152 samples in the test split, introducing aggressive dropout (such as 0.5) causes the network to underfit slightly. If the random search selected a sub-optimal learning rate, it caused the model to settle in a local minimum rather than finding the true global optimal weights.
 
-4. run scipt:
-(making sure image is in directory)
+### Quantitative Comparison
+The F1-Score represents the harmonic mean of precision and recall, calculated using the formula:
 
-## Gausian Blur
+$$F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$$
 
-Applying a gausian blur before edge detection reduces noise. At higher sigmas, the picture smoothes out too much which causes missed edges. At lower sigmas, pictures are too noisy resulting in noise being picked up as an edge
+#### Baseline Model Metrics (Learning Rate: 0.001, No Dropout)
+*   **Overall Accuracy:** 90%
+*   **Macro Precision:** 90%
+*   **Macro Recall:** 87%
+*   **Macro F1-Score:** 88%
 
-## Edge Detection
+#### Optimized Model Metrics (Tuner Selected Parameters)
+*   **Overall Accuracy:** 86%
+*   **Macro Precision:** 84%
+*   **Macro Recall:** 84%
+*   **Macro F1-Score:** 84%
 
-Used 4 different algorithms on heavily modified pictures.
+### Per-Class Insights (Optimized Model)
+Looking at the optimized model's breakdown, **Discus** was classified exceptionally well with an F1-score of 96% due to its unique round body shape and vibrant patterns. **Cray** proved to be the toughest class for the tuned model, a low 67% F1-score, its features were easily confused with other species under more aggressive regularization.
 
-1. Sobel: best results, first derivative changes, provides clear boundaries resistant to small noise.
-2. Prewitt: similar to sobel, without center weighting. Weaker edges, and more artifacts than sobel
-3. Laplacian: Second derivative, too sensitive, chaotic edge maps if Gausian blur was not strong enoug
-4. Canny: Highest computation cost. Provided continous, sharp outlines of objects on some of the images
+### Visualizations
+The loss curves, accuracy paths, and the final multi-class confusion matrix are visualized in the composite graphic below:
 
-## Plots
-
-![Plot 1](./output_images/README_plot_1.png)
-![Plot 2](./output_images/README_plot_2.png)
-![Plot 3](./output_images/README_plot_3.png)
-![Plot 4](./output_images/README_plot_4.png)
-![Plot 5](./output_images/README_plot_5.png)
-![Plot 6](./output_images/README_plot_6.png)
+![Evaluation Curves and Confusion Matrix](evaluation_visualizations.png)

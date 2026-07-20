@@ -54,3 +54,45 @@ val_ds = val_ds.cache().prefetch(buffer_size=autotune)
 test_ds = test_ds.cache().prefetch(buffer_size=autotune)
 
 print('Dataset loaded successfully!')
+
+#  CNN Architecture
+
+print('Building training model..')
+
+EPOCHS = 15
+
+baseline_model = models.Sequential([
+    layers.Input(shape=(img_size[0], img_size[1], 3)),
+    data_augmentation,
+    normalization_layer,
+
+    layers.Conv2D(32, 3, padding='same', activation='relu'),
+    layers.MaxPooling2D(),
+
+    layers.Conv2D(64, 3, padding='same', activation='relu'),
+    layers.MaxPooling2D(),
+
+    layers.Conv2D(128, 3, padding='same', activation='relu'),
+    layers.MaxPooling2D(),
+
+    layers.Flatten(),
+
+    layers.Dense(128, activation='relu'),
+
+    layers.Dense(num_classes, activation='softmax'),
+])
+
+baseline_model.compile(
+    optimizer=keras.optimizers.Adam(learning_rate=0.001),
+    loss='sparse_categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+history_baseline = baseline_model.fit(
+    train_ds,
+    validation_data=val_ds,
+    epochs=EPOCHS
+)
+
+baseline_model.save_weights('baseline_model_weights.weights.h5')
+print('Baseline model trained successfully')
